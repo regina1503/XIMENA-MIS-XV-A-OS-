@@ -8,48 +8,27 @@
     <style>
         body { background-color: #000; margin: 0; padding: 0; scroll-behavior: smooth; overflow-x: hidden; }
         .page { min-height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        /* Imágenes sin filtro opaco */
         .bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
         
-        .btn-custom { background-color: #470810; color: white; font-weight: bold; padding: 10px 20px; border-radius: 50px; text-decoration: none; transition: transform 0.2s, background-color 0.2s; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 10; font-size: 0.9rem; }
+        .btn-custom { background-color: #470810; color: white; font-weight: bold; padding: 10px 20px; border-radius: 50px; text-decoration: none; transition: transform 0.2s, background-color: 0.2s; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 10; font-size: 0.9rem; }
         .btn-custom:hover { transform: scale(1.05); background-color: #600b16; }
         
         .sello { 
-            width: 90px; 
-            height: 90px; 
-            border: 2px solid rgba(255, 255, 255, 0.5); 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            color: #ffffff; 
-            font-weight: bold; 
-            cursor: pointer; 
-            background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(5px);
-            z-index: 20; 
-            transition: transform 0.3s; 
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); 
-            text-align: center; 
-            padding: 5px; 
-            font-size: 0.7rem;
+            width: 54px; height: 54px; 
+            border: 2px solid #D4AF37; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; color: #D4AF37; font-weight: bold; 
+            cursor: pointer; background: rgba(212, 175, 55, 0.1); backdrop-filter: blur(5px);
+            z-index: 20; transition: transform 0.3s; box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); 
+            text-align: center; padding: 2px; font-size: 0.5rem; line-height: 1;
         }
-        .sello:hover { transform: scale(1.1); background: rgba(255, 255, 255, 0.2); }
+        .sello:hover { transform: scale(1.1); }
+
+        .texto-instruccion { color: #470810; margin-bottom: 8px; font-weight: bold; z-index: 20; font-size: 0.7rem; text-align: center; }
 
         .circle-timer { 
-            width: 42px; 
-            height: 42px; 
-            background-color: #470810; 
-            border-radius: 50%; 
-            border: 1px solid #D4AF37; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            color: white; 
-            font-weight: bold; 
-            font-size: 0.9rem; 
-            margin: 5px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
+            width: 42px; height: 42px; background-color: #470810; border-radius: 50%; border: 1px solid #D4AF37; 
+            display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; 
+            font-size: 0.9rem; margin: 2px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
         }
         .label { color: #470810; font-weight: bold; font-size: 0.6rem; text-transform: uppercase; margin-top: 5px; }
         
@@ -60,8 +39,8 @@
 
     <div id="overlay">
         <img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(8).jpg?raw=true" class="bg-image">
-        <div style="color: white; margin-bottom: 20px; font-weight: bold; text-shadow: 1px 1px 2px black; z-index: 20;">DA CLICK PARA ABRIR LA INVITACIÓN</div>
-        <div id="startBtn" class="sello">ABRIR<br>INVITACIÓN</div>
+        <div class="texto-instruccion">DA CLIC PARA<br>ABRIR LA INVITACIÓN</div>
+        <div id="startBtn" class="sello">ABRIR</div>
     </div>
 
     <audio id="bgMusic" loop>
@@ -75,8 +54,8 @@
     <section class="page">
         <img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(4).jpg?raw=true" class="bg-image">
         <div class="relative z-10 text-center flex flex-col items-center w-full">
-            <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[29vh]">Ver ubicación</a>
-            <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[35vh]">Ver ubicación</a>
+            <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[29.5vh]">Ver ubicación</a>
+            <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[40vh]">Ver ubicación</a>
         </div>
     </section>
 
@@ -84,7 +63,7 @@
     <section class="page"><img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(6).jpg?raw=true" class="bg-image"></section>
     <section class="page">
         <img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(7).jpg?raw=true" class="bg-image">
-        <div id="countdown" class="relative z-10 flex flex-wrap justify-center gap-4 mt-[-30vh]">
+        <div id="countdown" class="relative z-10 flex flex-wrap justify-center gap-1 mt-[-30vh]">
             <div class="flex flex-col items-center"><div id="days" class="circle-timer">00</div><span class="label">Días</span></div>
             <div class="flex flex-col items-center"><div id="hours" class="circle-timer">00</div><span class="label">Hrs</span></div>
             <div class="flex flex-col items-center"><div id="minutes" class="circle-timer">00</div><span class="label">Min</span></div>
@@ -95,7 +74,7 @@
     <script>
         const audio = document.getElementById("bgMusic");
         document.getElementById("startBtn").onclick = () => {
-            audio.currentTime = 10; // Inicia en el segundo 10
+            audio.currentTime = 10;
             audio.play();
             document.getElementById("overlay").style.display = 'none';
         };
