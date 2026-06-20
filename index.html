@@ -10,16 +10,17 @@
         .page { min-height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
         .bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
         
-        /* Efecto de pétalos dorados cayendo */
+        /* Efecto de pétalos/brillos delgados cayendo lentamente */
         #petals-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
         .petal {
-            position: absolute; width: 10px; height: 10px; background: rgba(212, 175, 55, 0.6); 
+            position: absolute; width: 4px; height: 4px; background: rgba(212, 175, 55, 0.5); 
             border-radius: 50%; opacity: 0; animation: fall linear infinite;
         }
         @keyframes fall {
             0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
-            10% { opacity: 1; }
-            100% { transform: translateY(110vh) translateX(20px); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(110vh) translateX(10px); opacity: 0; }
         }
 
         .btn-custom { background-color: #470810; color: white; font-weight: bold; padding: 10px 20px; border-radius: 50px; text-decoration: none; transition: transform 0.2s; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 10; font-size: 0.9rem; }
@@ -68,7 +69,7 @@
         <img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(4).jpg?raw=true" class="bg-image">
         <div class="relative z-10 text-center flex flex-col items-center w-full">
             <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[36.5vh]">Ver ubicación</a>
-            <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[49vh]">Ver ubicación</a>
+            <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[48.4vh]">Ver ubicación</a>
         </div>
     </section>
 
@@ -85,18 +86,18 @@
     </section>
 
     <script>
-        // Función para crear pétalos dorados
+        // Función para crear pétalos dorados delgados cayendo lentamente
         function createPetal() {
             const petal = document.createElement('div');
             petal.className = 'petal';
             petal.style.left = Math.random() * 100 + 'vw';
-            petal.style.animationDuration = Math.random() * 5 + 5 + 's';
-            petal.style.width = Math.random() * 8 + 4 + 'px';
+            petal.style.animationDuration = Math.random() * 8 + 10 + 's'; // Más lento (10-18s)
+            petal.style.width = Math.random() * 3 + 2 + 'px'; // Más delgado (2-5px)
             petal.style.height = petal.style.width;
             document.getElementById('petals-container').appendChild(petal);
-            setTimeout(() => petal.remove(), 10000);
+            setTimeout(() => petal.remove(), 20000);
         }
-        setInterval(createPetal, 600);
+        setInterval(createPetal, 1200); // Aparecen más espaciados
 
         const audio = document.getElementById("bgMusic");
         document.getElementById("startBtn").onclick = () => {
