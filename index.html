@@ -5,36 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XV Años Ximena</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-
-    <!-- Firebase (gratis, plan Spark) -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, doc, getDoc, getDocs, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCbyNYBC8NVKAIoSYCgLgBtEXHPo9LBWzY",
-            authDomain: "mis-xv-a-eee58.firebaseapp.com",
-            projectId: "mis-xv-a-eee58",
-            storageBucket: "mis-xv-a-eee58.firebasestorage.app",
-            messagingSenderId: "750781009543",
-            appId: "1:750781009543:web:855640ada95c8fbb95f222"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        window.fb = { db, collection, doc, getDoc, getDocs, setDoc, onSnapshot, guestsCol: collection(db, "guests") };
-        window.dispatchEvent(new Event('firebase-ready'));
-    </script>
-
     <style>
         body { background-color: #000; margin: 0; padding: 0; scroll-behavior: smooth; overflow-x: hidden; }
         .page { min-height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
         .bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
         
-        /* Efecto de pétalos/brillos delgados cayendo lentamente */
         #petals-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
         .petal {
             position: absolute; width: 4px; height: 4px; background: rgba(212, 175, 55, 0.5); 
@@ -70,109 +45,8 @@
         .label { color: #470810; font-weight: bold; font-size: 0.6rem; text-transform: uppercase; margin-top: 5px; }
         
         #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-
-        /* ===== Sección de pases (RSVP) ===== */
-        .rsvp-card {
-            background: rgba(10, 6, 4, 0.72);
-            border: 1px solid rgba(184, 134, 11, 0.45);
-            border-radius: 18px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            width: min(90vw, 380px);
-            padding: 28px 22px 24px;
-        }
-        .rsvp-title { font-family: Georgia, 'Times New Roman', serif; color: #D4AF37; font-size: 1.4rem; text-align: center; letter-spacing: 0.04em; margin-bottom: 4px; }
-        .rsvp-sub { color: #cbb98f; font-size: 0.72rem; text-align: center; margin-bottom: 18px; letter-spacing: 0.05em; }
-        .rsvp-input {
-            width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(184,134,11,0.4);
-            color: #fff; padding: 11px 14px; border-radius: 10px; font-size: 0.95rem; outline: none;
-            box-sizing: border-box; transition: border-color 0.2s;
-        }
-        .rsvp-input:focus { border-color: #D4AF37; }
-        .rsvp-input::placeholder { color: rgba(255,255,255,0.4); }
-        .rsvp-suggestions {
-            margin-top: 6px; border-radius: 10px; overflow: hidden;
-            background: rgba(20,12,8,0.95); border: 1px solid rgba(184,134,11,0.35);
-        }
-        .rsvp-suggestion-item {
-            padding: 11px 14px; color: #f1e6c8; font-size: 0.9rem; cursor: pointer;
-            border-bottom: 1px solid rgba(184,134,11,0.15); transition: background 0.15s;
-        }
-        .rsvp-suggestion-item:last-child { border-bottom: none; }
-        .rsvp-suggestion-item:hover, .rsvp-suggestion-item.active { background: rgba(184,134,11,0.18); }
-        .rsvp-suggestion-item .pases-tag { color: #B8860B; font-size: 0.75rem; float: right; }
-
-        .rsvp-step { margin-top: 16px; }
-        .rsvp-label { color: #cbb98f; font-size: 0.78rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
-        .pase-option {
-            display: flex; align-items: center; justify-content: space-between; gap: 10px;
-            background: rgba(255,255,255,0.05); border: 1.5px solid rgba(184,134,11,0.35);
-            border-radius: 10px; padding: 12px 16px; margin-bottom: 8px; cursor: pointer;
-            color: #f1e6c8; font-size: 0.95rem; transition: all 0.15s;
-        }
-        .pase-option.selected { border-color: #D4AF37; background: rgba(212,175,55,0.15); }
-        .pase-option .radio-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #B8860B; flex-shrink: 0; position: relative; }
-        .pase-option.selected .radio-dot::after { content: ''; position: absolute; inset: 2px; border-radius: 50%; background: #D4AF37; }
-
-        .rsvp-btn {
-            width: 100%; background: #470810; color: #fff; font-weight: bold; padding: 13px;
-            border-radius: 50px; border: 1px solid #D4AF37; cursor: pointer; font-size: 0.92rem;
-            margin-top: 16px; transition: all 0.2s; letter-spacing: 0.03em;
-        }
-        .rsvp-btn:hover:not(:disabled) { background: #600b16; transform: scale(1.02); }
-        .rsvp-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-        .rsvp-btn-link { background: transparent; border: none; color: #B8860B; font-size: 0.8rem; text-decoration: underline; cursor: pointer; margin-top: 10px; width: 100%; }
-
-        .rsvp-msg { color: #e6c98f; font-size: 0.8rem; text-align: center; margin-top: 10px; min-height: 16px; }
-        .rsvp-msg.error { color: #e07a6f; }
-
-        .qr-result { text-align: center; }
-        .qr-result img, .qr-result canvas { background: #fff; padding: 12px; border-radius: 10px; margin: 14px auto; }
-        .qr-name { color: #D4AF37; font-size: 1.1rem; font-weight: bold; }
-        .qr-passes { color: #cbb98f; font-size: 0.8rem; margin-top: 2px; }
-
-        .spinner { width: 22px; height: 22px; border: 2.5px solid rgba(212,175,55,0.25); border-top-color: #D4AF37; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 14px auto; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ===== Panel administrador ===== */
-        #adminOverlay {
-            position: fixed; inset: 0; z-index: 200; background: #0a0604;
-            display: none; flex-direction: column; align-items: center;
-            overflow-y: auto; padding: 30px 16px 60px;
-        }
-        .admin-login-box { width: min(90vw, 360px); margin-top: 18vh; text-align: center; }
-        .admin-header { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 720px; margin-bottom: 18px; }
-        .admin-title { font-family: Georgia, serif; color: #D4AF37; font-size: 1.3rem; }
-        .admin-tabs { display: flex; gap: 8px; margin-bottom: 18px; width: 100%; max-width: 720px; }
-        .admin-tab { flex: 1; text-align: center; padding: 10px; border-radius: 10px; background: rgba(255,255,255,0.05); color: #cbb98f; cursor: pointer; font-size: 0.85rem; border: 1px solid rgba(184,134,11,0.25); }
-        .admin-tab.active { background: #470810; color: #fff; border-color: #D4AF37; }
-        .admin-panel { width: 100%; max-width: 720px; }
-        .admin-stat-row { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
-        .admin-stat { flex: 1; min-width: 110px; background: rgba(255,255,255,0.05); border: 1px solid rgba(184,134,11,0.3); border-radius: 12px; padding: 14px; text-align: center; }
-        .admin-stat .num { color: #D4AF37; font-size: 1.6rem; font-weight: bold; display: block; }
-        .admin-stat .lbl { color: #cbb98f; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .admin-list-item {
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255,255,255,0.04); border: 1px solid rgba(184,134,11,0.2);
-            border-radius: 10px; padding: 12px 16px; margin-bottom: 8px;
-        }
-        .admin-list-item .nm { color: #f1e6c8; font-size: 0.92rem; }
-        .admin-list-item .meta { color: #8a7a5c; font-size: 0.72rem; margin-top: 2px; }
-        .badge { font-size: 0.68rem; font-weight: bold; padding: 4px 10px; border-radius: 20px; }
-        .badge.ok { background: rgba(60,160,90,0.2); color: #6fcf97; }
-        .badge.checked { background: rgba(212,175,55,0.2); color: #D4AF37; }
-        .badge.pending { background: rgba(255,255,255,0.08); color: #8a7a5c; }
-        .admin-close { background: transparent; border: 1px solid #B8860B; color: #B8860B; border-radius: 50px; padding: 6px 16px; font-size: 0.8rem; cursor: pointer; }
-        .admin-reassign-btn { background: transparent; border: 1px solid rgba(184,134,11,0.4); color: #B8860B; font-size: 0.72rem; padding: 5px 10px; border-radius: 8px; cursor: pointer; margin-left: 8px; }
-
-        #scannerView { width: 100%; max-width: 420px; margin: 0 auto; }
-        #scannerVideo { width: 100%; border-radius: 14px; border: 2px solid #D4AF37; background: #000; }
-        .scan-result-box { margin-top: 16px; padding: 16px; border-radius: 12px; text-align: center; }
-        .scan-result-box.valid { background: rgba(60,160,90,0.15); border: 1px solid #6fcf97; color: #6fcf97; }
-        .scan-result-box.repeat { background: rgba(212,175,55,0.15); border: 1px solid #D4AF37; color: #D4AF37; }
-        .scan-result-box.invalid { background: rgba(224,122,111,0.15); border: 1px solid #e07a6f; color: #e07a6f; }
-
-        .admin-trigger { position: fixed; bottom: 6px; right: 6px; width: 14px; height: 14px; z-index: 60; opacity: 0; cursor: pointer; }
+        
+        #adminPanel { transition: all 0.3s ease; }
     </style>
 </head>
 <body>
@@ -195,15 +69,31 @@
     <section class="page">
         <img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(4).jpg?raw=true" class="bg-image">
         <div class="relative z-10 text-center flex flex-col items-center w-full">
-            <!-- Primer botón bajado un 5% adicional (39.5 + 5 = 44.5) -->
             <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[44.5vh]">Ver ubicación</a>
-            <!-- Segundo botón se mantiene en 41vh -->
             <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[41vh]">Ver ubicación</a>
         </div>
     </section>
 
     <section class="page"><img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(5).jpg?raw=true" class="bg-image"></section>
-    <section class="page"><img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(6).jpg?raw=true" class="bg-image"></section>
+    
+    <section class="page">
+        <img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(6).jpg?raw=true" class="bg-image">
+        <div class="relative z-10 w-full max-w-sm px-6">
+            <div class="bg-white/90 p-6 rounded-2xl shadow-xl border border-gold-300">
+                <h3 class="text-xl font-bold text-[#470810] mb-4 text-center">Confirmación de Pases</h3>
+                <input type="text" id="guestSearch" placeholder="Escribe tu nombre..." class="w-full p-2 border border-gray-300 rounded-lg text-sm mb-2">
+                <div id="searchResults" class="max-h-40 overflow-y-auto mb-4 hidden bg-white border border-gray-200 rounded-lg shadow-sm"></div>
+                
+                <div id="confirmationView" class="hidden text-center">
+                    <p id="guestMsg" class="text-[#470810] mb-3 text-sm font-semibold"></p>
+                    <select id="passCount" class="w-full p-2 border border-[#470810] rounded-lg mb-4"></select>
+                    <button onclick="confirmAction()" class="bg-[#470810] text-white w-full py-2 rounded-lg font-bold text-sm">Confirmar asistencia</button>
+                </div>
+                <div id="successMsg" class="hidden text-green-700 font-bold text-center mt-2">¡Asistencia confirmada!</div>
+            </div>
+        </div>
+    </section>
+
     <section class="page">
         <img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(7).jpg?raw=true" class="bg-image">
         <div id="countdown" class="relative z-10 flex flex-wrap justify-center gap-1 mt-[-30vh]">
@@ -214,75 +104,86 @@
         </div>
     </section>
 
-    <!-- ===== PÁGINA 5: CONFIRMACIÓN DE PASES ===== -->
-    <section class="page" style="background:#0a0604;">
-        <div class="relative z-10" id="rsvpContainer">
-            <div class="rsvp-card" id="rsvpCard">
-                <!-- Loading inicial -->
-                <div id="rsvpLoading" style="text-align:center;">
-                    <div class="rsvp-title">Confirma tu asistencia</div>
-                    <div class="spinner"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Disparador discreto para abrir el panel del organizador -->
-    <div class="admin-trigger" id="adminTrigger"></div>
-
-    <!-- ===== PANEL ADMINISTRADOR ===== -->
-    <div id="adminOverlay">
-        <div class="admin-login-box" id="adminLoginBox">
-            <div class="rsvp-title">Panel del evento</div>
-            <div class="rsvp-sub">ACCESO PRIVADO</div>
-            <input type="password" id="adminPassInput" class="rsvp-input" placeholder="Contraseña">
-            <button class="rsvp-btn" id="adminLoginBtn">Entrar</button>
-            <div class="rsvp-msg error" id="adminLoginMsg"></div>
-            <button class="rsvp-btn-link" id="adminCancelBtn">Volver a la invitación</button>
-        </div>
-
-        <div class="admin-panel" id="adminPanel" style="display:none;">
-            <div class="admin-header">
-                <div class="admin-title">Panel del evento</div>
-                <button class="admin-close" id="adminCloseBtn">Cerrar</button>
-            </div>
-            <div class="admin-tabs">
-                <div class="admin-tab active" data-tab="confirmados">Confirmados</div>
-                <div class="admin-tab" data-tab="sobrantes">Pases sobrantes</div>
-                <div class="admin-tab" data-tab="scanner">Cámara QR</div>
-            </div>
-
-            <div id="tabConfirmados">
-                <div class="admin-stat-row" id="adminStats"></div>
-                <div id="adminList"></div>
-            </div>
-
-            <div id="tabSobrantes" style="display:none;">
-                <div class="rsvp-sub" style="text-align:left; margin-bottom:14px;">
-                    Cuando alguien confirma menos pases de los que le asignaste, el sobrante aparece aquí.
-                    Puedes pasarlo a otro invitado de la lista o crear uno nuevo.
-                </div>
-                <div id="sobrantesList"></div>
-                <div class="rsvp-label" style="margin-top:22px;">Agregar un invitado nuevo</div>
-                <input type="text" id="nuevoInvitadoNombre" class="rsvp-input" placeholder="Nombre completo">
-                <input type="number" id="nuevoInvitadoPases" class="rsvp-input" placeholder="Número de pases" min="1" style="margin-top:8px;">
-                <button class="rsvp-btn" id="agregarInvitadoBtn">Agregar invitado</button>
-                <div class="rsvp-msg" id="agregarInvitadoMsg"></div>
-            </div>
-
-            <div id="tabScanner" style="display:none;">
-                <div id="scannerView">
-                    <video id="scannerVideo" autoplay muted playsinline></video>
-                    <canvas id="scannerCanvas" style="display:none;"></canvas>
-                    <div id="scanResultBox"></div>
-                    <button class="rsvp-btn" id="scannerStartBtn" style="margin-top:14px;">Activar cámara</button>
-                </div>
-            </div>
-        </div>
+    <div id="adminPanel" class="hidden fixed bottom-10 right-10 z-[200] bg-white p-4 rounded-xl shadow-2xl border-2 border-[#470810] w-64">
+        <h4 class="font-bold text-[#470810] mb-2 text-center text-sm">Invitados Confirmados</h4>
+        <div id="confirmedList" class="text-xs text-gray-700 max-h-48 overflow-y-auto"></div>
+    </div>
+    <div class="fixed bottom-2 left-2 z-[200] cursor-pointer text-gray-500 hover:text-[#470810]" onclick="document.getElementById('adminPanel').classList.toggle('hidden')">
+        ⚙️
     </div>
 
-
     <script>
+        const guests = [
+            { name: "Regina Contreras", passes: 3 },
+            { name: "Mario", passes: 2 },
+            { name: "Sarai", passes: 4 },
+            { name: "Luna", passes: 1 }
+        ];
+
+        let selectedGuest = null;
+        const confirmedGuests = [];
+
+        const input = document.getElementById('guestSearch');
+        const resultsDiv = document.getElementById('searchResults');
+        const confirmationView = document.getElementById('confirmationView');
+        const guestMsg = document.getElementById('guestMsg');
+        const passCountSelect = document.getElementById('passCount');
+
+        input.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            resultsDiv.innerHTML = '';
+            
+            if (query.length >= 4) {
+                const matches = guests.filter(g => g.name.toLowerCase().includes(query));
+                if (matches.length > 0) {
+                    resultsDiv.classList.remove('hidden');
+                    matches.forEach(g => {
+                        const div = document.createElement('div');
+                        div.className = 'p-2 border-b cursor-pointer hover:bg-gray-100 text-sm';
+                        div.innerText = g.name;
+                        div.onclick = () => selectGuest(g);
+                        resultsDiv.appendChild(div);
+                    });
+                } else {
+                    resultsDiv.classList.add('hidden');
+                }
+            } else {
+                resultsDiv.classList.add('hidden');
+            }
+        });
+
+        function selectGuest(guest) {
+            selectedGuest = guest;
+            input.value = guest.name;
+            resultsDiv.classList.add('hidden');
+            confirmationView.classList.remove('hidden');
+            guestMsg.innerText = `Hola ${guest.name}, tienes ${guest.passes} pases disponibles.`;
+            
+            passCountSelect.innerHTML = '';
+            for(let i=1; i<=guest.passes; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = i + (i === 1 ? ' pase' : ' pases');
+                passCountSelect.appendChild(opt);
+            }
+        }
+
+        function confirmAction() {
+            const numPases = parseInt(passCountSelect.value);
+            confirmedGuests.push({ name: selectedGuest.name, passes: numPases });
+            
+            confirmationView.classList.add('hidden');
+            document.getElementById('successMsg').classList.remove('hidden');
+            input.disabled = true;
+            
+            updateAdminPanel();
+        }
+
+        function updateAdminPanel() {
+            const list = document.getElementById('confirmedList');
+            list.innerHTML = confirmedGuests.map(g => `<div class="mb-1 border-b pb-1"><strong>${g.name}</strong>: ${g.passes} pases</div>`).join('');
+        }
+
         function createPetal() {
             const petal = document.createElement('div');
             petal.className = 'petal';
@@ -312,441 +213,6 @@
         }
         setInterval(updateTimer, 1000);
         updateTimer();
-
-        /* =================================================================
-           SISTEMA DE PASES / RSVP / PANEL ADMIN / ESCÁNER QR
-           ================================================================= */
-
-        const ADMIN_PASSWORD = "Ximena15"; // <-- cambia esto por la contraseña que quieras usar
-
-        // Lista inicial de invitados. Se sube a Firestore solo la primera vez
-        // que alguien abre la invitación (si la colección "guests" está vacía).
-        const GUEST_LIST_SEED = [
-            { id: "regina-ruiz", nombre: "Regina Ruiz", pasesTotales: 4 },
-            { id: "pedro-lopez", nombre: "Pedro Lopez", pasesTotales: 2 },
-            { id: "susana", nombre: "Susana", pasesTotales: 1 },
-            { id: "sarai", nombre: "Sarai", pasesTotales: 2 }
-        ];
-
-        function genCode() {
-            return 'XV-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 7).toUpperCase();
-        }
-
-        // Espera a que el módulo de Firebase (en el <head>) haya inicializado window.fb
-        function waitForFirebase() {
-            return new Promise(resolve => {
-                if (window.fb) return resolve();
-                window.addEventListener('firebase-ready', () => resolve(), { once: true });
-                setTimeout(() => { if (window.fb) resolve(); }, 5000); // red de seguridad
-            });
-        }
-
-        async function getGuestList() {
-            await waitForFirebase();
-            if (!window.fb) return null;
-            const { getDocs, guestsCol } = window.fb;
-            const snap = await getDocs(guestsCol);
-            if (snap.empty) return null;
-            return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        }
-
-        async function saveGuest(guest) {
-            await waitForFirebase();
-            const { setDoc, doc, db } = window.fb;
-            const data = { ...guest };
-            delete data.id;
-            await setDoc(doc(db, 'guests', guest.id), data, { merge: true });
-        }
-
-        async function ensureGuestList() {
-            let list = await getGuestList();
-            if (!list) {
-                list = GUEST_LIST_SEED.map(g => ({
-                    ...g,
-                    pasesConfirmados: 0,
-                    confirmado: false,
-                    qrCode: null,
-                    fechaConfirmacion: null,
-                    checkedIn: false,
-                    fechaCheckIn: null
-                }));
-                for (const g of list) await saveGuest(g);
-            }
-            return list;
-        }
-
-        /* ---------- Búsqueda con sugerencias ---------- */
-        // Regla pedida: nombres cortos (<=4 letras, ej. "Ana") sugieren desde
-        // la 3ª letra escrita; el resto sugiere a partir de la 5ª letra escrita.
-        function buscarCoincidencias(query, lista) {
-            const q = query.trim().toLowerCase();
-            if (!q) return [];
-            return lista.filter(g => {
-                if (g.confirmado) return false; // ya confirmó, ya no aparece
-                const nombre = g.nombre.toLowerCase();
-                const primerNombre = nombre.split(' ')[0];
-                const minLetras = primerNombre.length <= 4 ? 3 : 5;
-                if (q.length < minLetras) return false;
-                return nombre.includes(q);
-            });
-        }
-
-        /* ---------- Render página de RSVP ---------- */
-        let rsvpState = { lista: [], seleccionado: null, pasesAConfirmar: 1 };
-
-        async function initRsvp() {
-            rsvpState.lista = await ensureGuestList();
-            renderRsvpBuscador();
-        }
-
-        function rsvpCardHTML(inner) {
-            return `<div class="rsvp-title">Confirma tu asistencia</div>
-                    <div class="rsvp-sub">XV AÑOS DE XIMENA</div>${inner}`;
-        }
-
-        function renderRsvpBuscador(msg) {
-            const card = document.getElementById('rsvpCard');
-            card.innerHTML = rsvpCardHTML(`
-                <div class="rsvp-step">
-                    <div class="rsvp-label">Escribe tu nombre</div>
-                    <input type="text" id="buscadorInput" class="rsvp-input" placeholder="Ej. Sarai" autocomplete="off">
-                    <div id="sugerencias"></div>
-                    <div class="rsvp-msg ${msg && msg.error ? 'error' : ''}">${msg ? msg.text : ''}</div>
-                </div>
-            `);
-            const input = document.getElementById('buscadorInput');
-            input.focus();
-            input.addEventListener('input', () => {
-                const matches = buscarCoincidencias(input.value, rsvpState.lista);
-                const box = document.getElementById('sugerencias');
-                if (!matches.length) { box.innerHTML = ''; box.className = ''; return; }
-                box.className = 'rsvp-suggestions';
-                box.innerHTML = matches.map(g =>
-                    `<div class="rsvp-suggestion-item" data-id="${g.id}">${g.nombre}<span class="pases-tag">${g.pasesTotales} pase${g.pasesTotales > 1 ? 's' : ''}</span></div>`
-                ).join('');
-                box.querySelectorAll('.rsvp-suggestion-item').forEach(el => {
-                    el.addEventListener('click', () => {
-                        const guest = rsvpState.lista.find(g => g.id === el.dataset.id);
-                        rsvpState.seleccionado = guest;
-                        renderSeleccionPases(guest);
-                    });
-                });
-            });
-        }
-
-        function renderSeleccionPases(guest) {
-            const card = document.getElementById('rsvpCard');
-            if (guest.pasesTotales === 1) {
-                rsvpState.pasesAConfirmar = 1;
-                renderConfirmacionFinal(guest, 1);
-                return;
-            }
-            const opciones = [];
-            for (let n = 1; n <= guest.pasesTotales; n++) opciones.push(n);
-            card.innerHTML = rsvpCardHTML(`
-                <div class="rsvp-step">
-                    <div class="rsvp-label">Hola, ${guest.nombre.split(' ')[0]} · ¿Cuántos pases confirmas?</div>
-                    ${opciones.map(n => `
-                        <div class="pase-option" data-n="${n}">
-                            <span>${n} pase${n > 1 ? 's' : ''}</span>
-                            <span class="radio-dot"></span>
-                        </div>
-                    `).join('')}
-                    <button class="rsvp-btn" id="continuarBtn" disabled>Confirmar</button>
-                    <button class="rsvp-btn-link" id="volverBtn">Volver a buscar</button>
-                </div>
-            `);
-            let seleccion = null;
-            card.querySelectorAll('.pase-option').forEach(el => {
-                el.addEventListener('click', () => {
-                    card.querySelectorAll('.pase-option').forEach(o => o.classList.remove('selected'));
-                    el.classList.add('selected');
-                    seleccion = parseInt(el.dataset.n);
-                    document.getElementById('continuarBtn').disabled = false;
-                });
-            });
-            document.getElementById('continuarBtn').addEventListener('click', () => {
-                if (!seleccion) return;
-                renderConfirmacionFinal(guest, seleccion);
-            });
-            document.getElementById('volverBtn').addEventListener('click', () => renderRsvpBuscador());
-        }
-
-        async function renderConfirmacionFinal(guest, pases) {
-            const card = document.getElementById('rsvpCard');
-            card.innerHTML = rsvpCardHTML(`<div style="text-align:center;"><div class="spinner"></div></div>`);
-
-            // Volvemos a leer ese documento por si alguien más confirmó justo antes
-            await waitForFirebase();
-            const { getDoc, doc, db } = window.fb;
-            const ref = doc(db, 'guests', guest.id);
-            const snap = await getDoc(ref);
-            const actual = snap.exists() ? snap.data() : null;
-            if (!actual || actual.confirmado) {
-                renderRsvpBuscador({ text: 'Esos pases ya fueron confirmados. Si crees que es un error, contacta a la organizadora.', error: true });
-                return;
-            }
-
-            const codigo = genCode();
-            const guestActualizado = {
-                ...guest,
-                confirmado: true,
-                pasesConfirmados: pases,
-                qrCode: codigo,
-                fechaConfirmacion: new Date().toISOString()
-            };
-            await saveGuest(guestActualizado);
-
-            // Generar QR visual
-            card.innerHTML = `
-                <div class="qr-result">
-                    <div class="rsvp-title" style="margin-bottom:2px;">¡Pase confirmado!</div>
-                    <div class="qr-name">${guest.nombre}</div>
-                    <div class="qr-passes">${pases} pase${pases > 1 ? 's' : ''} confirmado${pases > 1 ? 's' : ''}</div>
-                    <canvas id="qrCanvas"></canvas>
-                    <div class="rsvp-sub" style="margin-top:6px;">Muestra este código en la entrada del evento</div>
-                </div>
-            `;
-            QRCode.toCanvas(document.getElementById('qrCanvas'), codigo, { width: 200, margin: 1, color: { dark: '#470810', light: '#ffffff' } });
-        }
-
-        initRsvp();
-
-        /* ---------- Panel administrador ---------- */
-        const adminOverlay = document.getElementById('adminOverlay');
-        const adminTrigger = document.getElementById('adminTrigger');
-        const adminLoginBox = document.getElementById('adminLoginBox');
-        const adminPanel = document.getElementById('adminPanel');
-        let adminUnlocked = false;
-        let scannerStream = null;
-        let scannerLoopActive = false;
-
-        adminTrigger.addEventListener('click', () => {
-            adminOverlay.style.display = 'flex';
-            audio.pause();
-            if (adminUnlocked) showAdminPanel();
-        });
-        document.getElementById('adminCancelBtn').addEventListener('click', () => { adminOverlay.style.display = 'none'; });
-        document.getElementById('adminCloseBtn').addEventListener('click', () => {
-            adminOverlay.style.display = 'none';
-            stopScanner();
-        });
-        document.getElementById('adminLoginBtn').addEventListener('click', tryAdminLogin);
-        document.getElementById('adminPassInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryAdminLogin(); });
-
-        function tryAdminLogin() {
-            const val = document.getElementById('adminPassInput').value;
-            if (val === ADMIN_PASSWORD) {
-                adminUnlocked = true;
-                document.getElementById('adminLoginMsg').textContent = '';
-                showAdminPanel();
-            } else {
-                document.getElementById('adminLoginMsg').textContent = 'Contraseña incorrecta.';
-            }
-        }
-
-        function showAdminPanel() {
-            adminLoginBox.style.display = 'none';
-            adminPanel.style.display = 'block';
-            renderAdminConfirmados();
-        }
-
-        const TABS = ['confirmados', 'sobrantes', 'scanner'];
-        document.querySelectorAll('.admin-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                const activa = tab.dataset.tab;
-                TABS.forEach(t => {
-                    document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).style.display = (t === activa) ? 'block' : 'none';
-                });
-                if (activa !== 'scanner') stopScanner();
-                if (activa === 'sobrantes') renderSobrantes();
-            });
-        });
-
-        async function renderAdminConfirmados() {
-            const lista = await getGuestList() || [];
-            const confirmados = lista.filter(g => g.confirmado);
-            const pasesTotalesInvitados = lista.reduce((a, g) => a + g.pasesTotales, 0);
-            const pasesConfirmados = confirmados.reduce((a, g) => a + g.pasesConfirmados, 0);
-            const checkedIn = lista.filter(g => g.checkedIn).length;
-
-            document.getElementById('adminStats').innerHTML = `
-                <div class="admin-stat"><span class="num">${confirmados.length}/${lista.length}</span><span class="lbl">Familias confirmadas</span></div>
-                <div class="admin-stat"><span class="num">${pasesConfirmados}/${pasesTotalesInvitados}</span><span class="lbl">Pases confirmados</span></div>
-                <div class="admin-stat"><span class="num">${checkedIn}</span><span class="lbl">Ya en el evento</span></div>
-            `;
-
-            document.getElementById('adminList').innerHTML = lista.map(g => {
-                const sobrantes = g.confirmado ? (g.pasesTotales - g.pasesConfirmados) : 0;
-                let badge = '<span class="badge pending">Pendiente</span>';
-                if (g.checkedIn) badge = '<span class="badge checked">En el evento</span>';
-                else if (g.confirmado) badge = '<span class="badge ok">Confirmó</span>';
-                return `<div class="admin-list-item">
-                    <div>
-                        <div class="nm">${g.nombre}</div>
-                        <div class="meta">${g.confirmado ? g.pasesConfirmados + ' de ' + g.pasesTotales + ' pases' : g.pasesTotales + ' pases asignados'}${sobrantes > 0 ? ' · ' + sobrantes + ' sin usar' : ''}</div>
-                    </div>
-                    <div>${badge}</div>
-                </div>`;
-            }).join('');
-        }
-
-        /* ---------- Pases sobrantes y reasignación ---------- */
-        async function renderSobrantes() {
-            const lista = await getGuestList() || [];
-            const conSobrante = lista.filter(g => g.confirmado && (g.pasesTotales - g.pasesConfirmados) > 0);
-            const box = document.getElementById('sobrantesList');
-
-            if (!conSobrante.length) {
-                box.innerHTML = `<div class="rsvp-msg" style="text-align:left;">No hay pases sobrantes por el momento.</div>`;
-                return;
-            }
-
-            box.innerHTML = conSobrante.map(g => {
-                const sobrante = g.pasesTotales - g.pasesConfirmados;
-                const opciones = lista.filter(o => o.id !== g.id)
-                    .map(o => `<option value="${o.id}">${o.nombre}</option>`).join('');
-                return `<div class="admin-list-item" style="flex-direction:column; align-items:stretch; gap:8px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <div class="nm">${g.nombre}</div>
-                            <div class="meta">${sobrante} pase${sobrante > 1 ? 's' : ''} sin usar</div>
-                        </div>
-                    </div>
-                    <div style="display:flex; gap:8px;">
-                        <select class="form-select rsvp-input" id="select-${g.id}" style="flex:1; padding:8px 10px; font-size:0.82rem;">
-                            <option value="">Pasar a...</option>
-                            ${opciones}
-                        </select>
-                        <button class="admin-reassign-btn" data-from="${g.id}" data-sobrante="${sobrante}">Pasar 1 pase</button>
-                    </div>
-                </div>`;
-            }).join('');
-
-            box.querySelectorAll('.admin-reassign-btn').forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    const fromId = btn.dataset.from;
-                    const select = document.getElementById('select-' + fromId);
-                    const toId = select.value;
-                    if (!toId) { select.style.borderColor = '#e07a6f'; return; }
-                    await reasignarPase(fromId, toId);
-                    renderSobrantes();
-                    renderAdminConfirmados();
-                });
-            });
-        }
-
-        async function reasignarPase(fromId, toId) {
-            await waitForFirebase();
-            const { getDoc, doc, db } = window.fb;
-            const fromSnap = await getDoc(doc(db, 'guests', fromId));
-            const toSnap = await getDoc(doc(db, 'guests', toId));
-            if (!fromSnap.exists() || !toSnap.exists()) return;
-            const from = { id: fromId, ...fromSnap.data() };
-            const to = { id: toId, ...toSnap.data() };
-
-            if ((from.pasesTotales - from.pasesConfirmados) <= 0) return;
-
-            from.pasesTotales -= 1;
-            to.pasesTotales += 1;
-            await saveGuest(from);
-            await saveGuest(to);
-        }
-
-        document.getElementById('agregarInvitadoBtn').addEventListener('click', async () => {
-            const nombre = document.getElementById('nuevoInvitadoNombre').value.trim();
-            const pases = parseInt(document.getElementById('nuevoInvitadoPases').value);
-            const msg = document.getElementById('agregarInvitadoMsg');
-            if (!nombre || !pases || pases < 1) {
-                msg.textContent = 'Escribe un nombre y un número de pases válido.';
-                msg.className = 'rsvp-msg error';
-                return;
-            }
-            const id = nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-            await saveGuest({
-                id, nombre, pasesTotales: pases, pasesConfirmados: 0,
-                confirmado: false, qrCode: null, fechaConfirmacion: null,
-                checkedIn: false, fechaCheckIn: null
-            });
-            document.getElementById('nuevoInvitadoNombre').value = '';
-            document.getElementById('nuevoInvitadoPases').value = '';
-            msg.textContent = `${nombre} agregado con ${pases} pase(s).`;
-            msg.className = 'rsvp-msg';
-            renderAdminConfirmados();
-        });
-
-        /* ---------- Escáner de cámara para QR ---------- */
-        const scannerVideo = document.getElementById('scannerVideo');
-        const scannerCanvas = document.getElementById('scannerCanvas');
-        const scanResultBox = document.getElementById('scanResultBox');
-
-        document.getElementById('scannerStartBtn').addEventListener('click', startScanner);
-
-        async function startScanner() {
-            try {
-                scannerStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-                scannerVideo.srcObject = scannerStream;
-                await scannerVideo.play();
-                scannerLoopActive = true;
-                document.getElementById('scannerStartBtn').style.display = 'none';
-                requestAnimationFrame(scanLoop);
-            } catch (e) {
-                scanResultBox.innerHTML = `<div class="scan-result-box invalid">No se pudo acceder a la cámara. Revisa los permisos del navegador.</div>`;
-            }
-        }
-
-        function stopScanner() {
-            scannerLoopActive = false;
-            if (scannerStream) {
-                scannerStream.getTracks().forEach(t => t.stop());
-                scannerStream = null;
-            }
-            document.getElementById('scannerStartBtn').style.display = 'block';
-        }
-
-        let lastScanCode = null;
-        let lastScanTime = 0;
-
-        function scanLoop() {
-            if (!scannerLoopActive) return;
-            if (scannerVideo.readyState === scannerVideo.HAVE_ENOUGH_DATA) {
-                scannerCanvas.width = scannerVideo.videoWidth;
-                scannerCanvas.height = scannerVideo.videoHeight;
-                const ctx = scannerCanvas.getContext('2d');
-                ctx.drawImage(scannerVideo, 0, 0, scannerCanvas.width, scannerCanvas.height);
-                const imageData = ctx.getImageData(0, 0, scannerCanvas.width, scannerCanvas.height);
-                const code = jsQR(imageData.data, imageData.width, imageData.height);
-                if (code && code.data) {
-                    const now = Date.now();
-                    if (code.data !== lastScanCode || now - lastScanTime > 3000) {
-                        lastScanCode = code.data;
-                        lastScanTime = now;
-                        handleScannedCode(code.data);
-                    }
-                }
-            }
-            requestAnimationFrame(scanLoop);
-        }
-
-        async function handleScannedCode(codigo) {
-            const lista = await getGuestList() || [];
-            const guest = lista.find(g => g.qrCode === codigo);
-            if (!guest) {
-                scanResultBox.innerHTML = `<div class="scan-result-box invalid">Código no reconocido.</div>`;
-                return;
-            }
-            if (guest.checkedIn) {
-                scanResultBox.innerHTML = `<div class="scan-result-box repeat">${guest.nombre} ya entró al evento (${guest.pasesConfirmados} pases) el ${new Date(guest.fechaCheckIn).toLocaleString('es-MX')}.</div>`;
-                return;
-            }
-            guest.checkedIn = true;
-            guest.fechaCheckIn = new Date().toISOString();
-            await saveGuest(guest);
-            scanResultBox.innerHTML = `<div class="scan-result-box valid">Acceso válido: ${guest.nombre} · ${guest.pasesConfirmados} pase${guest.pasesConfirmados > 1 ? 's' : ''}.</div>`;
-            renderAdminConfirmados();
-        }
     </script>
 </body>
 </html>
