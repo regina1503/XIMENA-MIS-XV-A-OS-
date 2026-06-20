@@ -6,59 +6,66 @@
     <title>XV Años Ximena</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #000; margin: 0; padding: 0; scroll-behavior: smooth; }
+        body { background-color: #000; margin: 0; padding: 0; scroll-behavior: smooth; overflow-x: hidden; }
         .page { min-height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
         .bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; filter: brightness(0.8); }
-        .btn-custom { background-color: #470810; color: white; font-weight: bold; padding: 12px 24px; border-radius: 50px; text-decoration: none; transition: transform 0.2s, background-color 0.2s; display: inline-block; margin: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 10; }
-        .btn-custom:hover { transform: scale(1.05); background-color: #600b16; }
-        .circle-timer { width: 60px; height: 60px; background-color: #470810; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.25rem; margin: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        .label { color: #470810; font-weight: bold; font-size: 0.75rem; text-transform: uppercase; margin-top: 5px; }
         
-        /* Overlay de inicio con la imagen 8 */
-        #overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: 100; display: flex; align-items: center; justify-content: center;
-            background-image: url('https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(8).jpg?raw=true');
-            background-size: cover;
-            background-position: center;
+        .btn-custom { background-color: #470810; color: white; font-weight: bold; padding: 12px 24px; border-radius: 50px; text-decoration: none; transition: transform 0.2s, background-color 0.2s; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 10; }
+        .btn-custom:hover { transform: scale(1.05); background-color: #600b16; }
+        
+        .sello { 
+            width: 150px; 
+            height: 150px; 
+            border: 2px solid rgba(255, 255, 255, 0.5); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #ffffff; 
+            font-weight: bold; 
+            cursor: pointer; 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(5px);
+            z-index: 20; 
+            transition: transform 0.3s; 
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); 
+            text-align: center; 
+            padding: 10px; 
         }
+        .sello:hover { transform: scale(1.1); background: rgba(255, 255, 255, 0.2); }
+
+        .circle-timer { width: 42px; height: 42px; background-color: #470810; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.9rem; margin: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .label { color: #470810; font-weight: bold; font-size: 0.6rem; text-transform: uppercase; margin-top: 5px; }
+        
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
 
     <div id="overlay">
-        <button id="startBtn" class="btn-custom">Iniciar Invitación</button>
+        <img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(8).jpg?raw=true" class="bg-image">
+        <div style="color: white; margin-bottom: 20px; font-weight: bold; text-shadow: 1px 1px 2px black; z-index: 20;">DA CLICK PARA ABRIR LA INVITACIÓN</div>
+        <div id="startBtn" class="sello">ABRIR<br>INVITACIÓN</div>
     </div>
 
     <audio id="bgMusic" loop>
         <source src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/Taylor%20Swift%20-%20Fifteen.mp3?raw=true" type="audio/mpeg">
     </audio>
 
-    <!-- PÁGINA 1: Imagen 2 -->
     <section class="page"><img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(2).jpg?raw=true" class="bg-image"></section>
-    
-    <!-- PÁGINA 2: Imagen 1 -->
     <section class="page"><img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(1).jpg?raw=true" class="bg-image"></section>
-    
-    <!-- PÁGINA 3: Imagen 3 -->
     <section class="page"><img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(3).jpg?raw=true" class="bg-image"></section>
     
-    <!-- PÁGINA 4: Imagen 4 (Botones) -->
     <section class="page">
         <img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(4).jpg?raw=true" class="bg-image">
-        <div class="relative z-10 text-center flex flex-col items-center">
-            <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom">Ver ubicación</a>
-            <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[40vh]">Ver ubicación</a>
+        <div class="relative z-10 text-center flex flex-col items-center w-full">
+            <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[30vh]">Ver ubicación</a>
+            <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[20vh]">Ver ubicación</a>
         </div>
     </section>
-    
-    <!-- PÁGINA 5: Imagen 5 -->
+
     <section class="page"><img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(5).jpg?raw=true" class="bg-image"></section>
-    
-    <!-- PÁGINA 6: Imagen 6 -->
     <section class="page"><img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(6).jpg?raw=true" class="bg-image"></section>
-    
-    <!-- PÁGINA 7: Imagen 7 (Timer) -->
     <section class="page">
         <img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(7).jpg?raw=true" class="bg-image">
         <div id="countdown" class="relative z-10 flex flex-wrap justify-center gap-4 mt-[-30vh]">
