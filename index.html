@@ -10,7 +10,6 @@
         .page { min-height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
         .bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
         
-        /* Efecto de pétalos/brillos delgados cayendo lentamente */
         #petals-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
         .petal {
             position: absolute; width: 4px; height: 4px; background: rgba(212, 175, 55, 0.5); 
@@ -68,8 +67,8 @@
     <section class="page">
         <img src="https://github.com/regina1503/XIMENA-MIS-XV-A-OS-/blob/main/XV%20XIME%20(4).jpg?raw=true" class="bg-image">
         <div class="relative z-10 text-center flex flex-col items-center w-full">
-            <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[36.5vh]">Ver ubicación</a>
-            <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[42.9vh]">Ver ubicación</a>
+            <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[38.5vh]">Ver ubicación</a>
+            <a href="https://www.google.com/maps/place/Loto+Events/@19.2498461,-99.6457375,899m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cd890ad35505e9:0x4b7acbb4e7cdfc3!8m2!1d19.2498461!2d-99.6457375!16s%2Fg%2F11tx1pb0zp!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" class="btn-custom mt-[48.4vh]">Ver ubicación</a>
         </div>
     </section>
 
@@ -86,18 +85,17 @@
     </section>
 
     <script>
-        // Función para crear pétalos dorados delgados cayendo lentamente
         function createPetal() {
             const petal = document.createElement('div');
             petal.className = 'petal';
             petal.style.left = Math.random() * 100 + 'vw';
-            petal.style.animationDuration = Math.random() * 8 + 10 + 's'; // Más lento (10-18s)
-            petal.style.width = Math.random() * 3 + 2 + 'px'; // Más delgado (2-5px)
+            petal.style.animationDuration = Math.random() * 8 + 10 + 's'; 
+            petal.style.width = Math.random() * 3 + 2 + 'px'; 
             petal.style.height = petal.style.width;
             document.getElementById('petals-container').appendChild(petal);
             setTimeout(() => petal.remove(), 20000);
         }
-        setInterval(createPetal, 1200); // Aparecen más espaciados
+        setInterval(createPetal, 1200); 
 
         const audio = document.getElementById("bgMusic");
         document.getElementById("startBtn").onclick = () => {
